@@ -15,7 +15,7 @@ public class Recipes {
 
     private int cookingTime;
 
-    private Ingredients ingredients;
+    private Ingredients ingredients[];
 
     private String cookingMethod;
 
