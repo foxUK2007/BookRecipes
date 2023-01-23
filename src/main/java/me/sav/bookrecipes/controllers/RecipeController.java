@@ -29,7 +29,6 @@ public class RecipeController {
         return ResponseEntity.ok(recipes);
     }
 
-
     @PutMapping("/{id}")
     public ResponseEntity<Recipes> putRecipe(@PathVariable int id, @RequestBody Recipes newRecipes) {
         recipeService.putRecipe(id, newRecipes);

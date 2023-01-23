@@ -21,7 +21,6 @@ public class RecipeServiceImpl implements RecipeService {
         recipesMap.put(recipeID++, recipes);
 
     }
-
     @Override
     public Recipes getRecipe(int number) {
         return recipesMap.get(number);

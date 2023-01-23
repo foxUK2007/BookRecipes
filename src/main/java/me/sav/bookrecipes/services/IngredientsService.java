@@ -16,6 +16,4 @@ public interface IngredientsService {
 
     void putIngredients(int ingredientsID, Ingredients newIngredients);
 
-
-
 }

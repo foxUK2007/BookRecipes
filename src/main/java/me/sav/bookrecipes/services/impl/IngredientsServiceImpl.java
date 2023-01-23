@@ -28,7 +28,6 @@ public class IngredientsServiceImpl implements IngredientsService {
         ingredientsMap.put(ingredientsID, newIngredients);
 
     }
-
     @Override
     public void deleteIngredients(int ingredientsID) {
         ingredientsMap.remove(ingredientsID);

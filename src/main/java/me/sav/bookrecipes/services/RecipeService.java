@@ -15,7 +15,4 @@ public interface RecipeService {
     List<Recipes> getAllRecipe();
 
     void putRecipe(int id, Recipes newRecipes);
-
-
-
 }

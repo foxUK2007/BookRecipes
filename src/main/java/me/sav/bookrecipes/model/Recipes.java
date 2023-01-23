@@ -19,6 +19,4 @@ public class Recipes {
 
     private String cookingMethod;
 
-
-
 }
