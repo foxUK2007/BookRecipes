@@ -21,8 +21,8 @@ public class RecipeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Recipes> getRecipe(@PathVariable int number) {
-        Recipes recipes = recipeService.getRecipe(number);
+    public ResponseEntity<Recipes> getRecipe(@PathVariable int id) {
+        Recipes recipes = recipeService.getRecipe(id);
         if (recipes == null) {
             return ResponseEntity.notFound().build();
         }
@@ -30,13 +30,13 @@ public class RecipeController {
     }
 
 
-    @PutMapping("/put/{id}")
-    public ResponseEntity<Recipes> putRecipe(@PathVariable int recipeID, @RequestBody Recipes newRecipes) {
-        recipeService.putRecipe(recipeID, newRecipes);
+    @PutMapping("/{id}")
+    public ResponseEntity<Recipes> putRecipe(@PathVariable int id, @RequestBody Recipes newRecipes) {
+        recipeService.putRecipe(id, newRecipes);
         return ResponseEntity.ok().body(newRecipes);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Recipes> deleteRecipe(@PathVariable int id) {
         recipeService.deleteRecipe(id);
         return ResponseEntity.ok().build();
