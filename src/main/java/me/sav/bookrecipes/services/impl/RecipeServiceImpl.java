@@ -21,6 +21,7 @@ public class RecipeServiceImpl implements RecipeService {
         recipesMap.put(recipeID++, recipes);
 
     }
+
     @Override
     public Recipes getRecipe(int number) {
         return recipesMap.get(number);
@@ -33,12 +34,8 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public List<Recipes> getAllRecipe() {
-        ArrayList<Recipes> allRecipes = new ArrayList<>();
-        for (Map.Entry<Integer, Recipes> pair : recipesMap.entrySet()) {
-            allRecipes.add(pair.getValue());
-        }
-        return allRecipes;
+    public Map<Integer, Recipes> getAllRecipe() {
+        return recipesMap;
     }
 
     @Override
