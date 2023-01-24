@@ -3,6 +3,7 @@ package me.sav.bookrecipes.services;
 import me.sav.bookrecipes.model.Recipes;
 
 import java.util.List;
+import java.util.Map;
 
 public interface RecipeService {
 
@@ -12,7 +13,7 @@ public interface RecipeService {
 
     void deleteRecipe(int counter);
 
-    List<Recipes> getAllRecipe();
+    Map<Integer,Recipes> getAllRecipe();
 
     void putRecipe(int id, Recipes newRecipes);
 }

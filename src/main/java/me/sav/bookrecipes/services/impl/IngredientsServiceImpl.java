@@ -33,5 +33,10 @@ public class IngredientsServiceImpl implements IngredientsService {
         ingredientsMap.remove(ingredientsID);
     }
 
+    @Override
+    public Map<Integer, Ingredients> getAllIngredients() {
+        return ingredientsMap;
+    }
+
 }
 

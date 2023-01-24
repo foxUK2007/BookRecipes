@@ -6,6 +6,8 @@ import me.sav.bookrecipes.services.IngredientsService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RequestMapping("/ingredients")
 public class IngredientsController {
     private final IngredientsService ingredientsService;
@@ -40,5 +42,15 @@ public class IngredientsController {
     public ResponseEntity<Ingredients> deleteIngredients(@PathVariable int id) {
         ingredientsService.deleteIngredients(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<Map<Integer, Ingredients>> getAllIngredients() {
+        Map<Integer, Ingredients> ingredientsMap = ingredientsService.getAllIngredients();
+        if (ingredientsMap!= null) {
+            return ResponseEntity.ok(ingredientsMap);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
