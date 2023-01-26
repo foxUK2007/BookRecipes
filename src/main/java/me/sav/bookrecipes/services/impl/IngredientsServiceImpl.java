@@ -10,9 +10,14 @@ import java.util.TreeMap;
 @Service
 public class IngredientsServiceImpl implements IngredientsService {
 
+    final private FilesServiceImpl filesService;
     private final Map<Integer, Ingredients> ingredientsMap = new TreeMap<>();
 
     static int ingredientsID = 0;
+
+    public IngredientsServiceImpl(FilesServiceImpl filesService) {
+        this.filesService = filesService;
+    }
 
     @Override
     public void addIngredients(Ingredients ingredients) {
