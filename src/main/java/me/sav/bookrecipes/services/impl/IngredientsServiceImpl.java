@@ -4,11 +4,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.sav.bookrecipes.model.Ingredients;
-import me.sav.bookrecipes.model.Recipes;
 import me.sav.bookrecipes.services.IngredientsService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.nio.file.Path;
+import java.io.IOException;
+import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -46,6 +50,19 @@ public class IngredientsServiceImpl implements IngredientsService {
         ingredientsMap.put(ingredientsID, newIngredients);
         saveToFileIg();
 
+    }
+
+    @Override
+    public Path createIngredientsReport(Ingredients ingredients) throws IOException {
+        Map<Integer, Ingredients> ingredientsMapOrDefault = (Map<Integer, Ingredients>) ingredientsMap.getOrDefault(ingredients, new Ingredients());
+        Path path =filesService.createTempFileRc("ingredientsReport");
+        for (Ingredients ingredient : ingredientsMapOrDefault.values()) {
+            try (Writer writer = Files.newBufferedWriter(path, StandardOpenOption.APPEND)) {
+                writer.append(ingredient.getIngredient() + ingredient.getAmountIngredient() + ingredient.getMeasure());
+                writer.append("\n");
+            }
+        }
+        return path;
     }
 
     @Override

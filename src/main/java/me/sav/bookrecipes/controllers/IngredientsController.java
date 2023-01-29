@@ -9,9 +9,16 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import me.sav.bookrecipes.model.Ingredients;
 import me.sav.bookrecipes.model.Recipes;
 import me.sav.bookrecipes.services.IngredientsService;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Map;
 @RestController
 @RequestMapping("/ingredients")
@@ -65,6 +72,42 @@ public class IngredientsController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(ingredients);
+    }
+
+
+    @GetMapping("/{ingredient}")
+    @Operation(
+            summary = "Получение любого ингредиента из книги",
+            description = "Получение по порядковому номеру ингредиента"
+    )
+    @ApiResponses(value =
+            {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Ингредиент получен"
+                    )
+            })
+    @Parameters(value = {
+            @Parameter(name = "Порядковый номер ингредиента",
+                    description = "Целое число")
+    })
+    public ResponseEntity<InputStreamResource> getIngredient(@PathVariable Ingredients ingredients) {
+        try {
+            Path path = (Path) ingredientsService.createIngredientsReport(new Ingredients());
+            if (Files.size(path) != 0) {
+                return ResponseEntity.noContent().build();
+            }
+            InputStreamResource resource = new InputStreamResource(new FileInputStream(path.toFile()));
+            return ResponseEntity.ok()
+                    .contentType(MediaType.TEXT_PLAIN)
+                    .contentLength(Files.size(path))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename =\"" + ingredients + "-report.txt\"")
+                    .body(resource);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     @PutMapping("/{id}")

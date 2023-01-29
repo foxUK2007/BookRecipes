@@ -8,9 +8,17 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import me.sav.bookrecipes.model.Recipes;
 import me.sav.bookrecipes.services.RecipeService;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -69,6 +77,41 @@ public class RecipeController {
         return ResponseEntity.ok(recipes);
     }
 
+    @GetMapping("/{recipe}")
+    @Operation(
+            summary = "Получение любого рецепта из книги",
+            description = "Получение по порядковому номеру рецепта"
+    )
+    @ApiResponses(value =
+            {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Рецепт получен"
+                    )
+            })
+    @Parameters(value = {
+            @Parameter(name = "Порядковый номер рецепта",
+                    description = "Целое число")
+    })
+    public ResponseEntity<InputStreamResource> getRecipe(@PathVariable Recipes recipe) {
+        try {
+            java.nio.file.Path path = (Path) recipeService.createRecipeReport(new Recipes());
+            if (Files.size(path) != 0) {
+                return ResponseEntity.noContent().build();
+            }
+            InputStreamResource resource = new InputStreamResource(new FileInputStream(path.toFile()));
+            return ResponseEntity.ok()
+                    .contentType(MediaType.TEXT_PLAIN)
+                    .contentLength(Files.size(path))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename =\"" + recipe + "-report.txt\"")
+                    .body(resource);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
     @PutMapping("/{id}")
     @Operation(
             summary = "Изменение содержания рецептов",
@@ -105,6 +148,7 @@ public class RecipeController {
         recipeService.deleteRecipe(id);
         return ResponseEntity.ok().build();
     }
+
     @GetMapping("/all")
     @Operation(
             summary = "Получение списка всех рецептов из книги",
@@ -121,5 +165,6 @@ public class RecipeController {
             return ResponseEntity.notFound().build();
         }
     }
+
 }
 

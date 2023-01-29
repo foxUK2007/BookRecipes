@@ -4,6 +4,7 @@ import me.sav.bookrecipes.services.FilesService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -60,7 +61,8 @@ public class FilesServiceImpl implements FilesService {
         }
     }
 
-    private boolean cleanDataFileRc() {
+    @Override
+    public boolean cleanDataFileRc() {
         try {
             Path path = Path.of(dataFilePath, recipeFileName);
             Files.deleteIfExists(path);
@@ -72,7 +74,8 @@ public class FilesServiceImpl implements FilesService {
 
     }
 
-    private boolean cleanDataFileIg() {
+    @Override
+    public boolean cleanDataFileIg() {
         try {
             Path path = Path.of(dataFilePath, ingredientFileName);
             Files.deleteIfExists(path);
@@ -82,6 +85,34 @@ public class FilesServiceImpl implements FilesService {
             return false;
         }
 
+    }
+
+    @Override
+    public File getDataFileRc() {
+        return new File(dataFilePath + "/" + recipeFileName);
+    }
+
+    @Override
+    public File getDataFileIg() {
+        return new File(dataFilePath + "/" + ingredientFileName);
+    }
+
+    @Override
+    public Path createTempFileRc(String suffix) {
+        try {
+            return Files.createTempFile(Path.of(dataFilePath), "tempRecipeFile", suffix);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Path createTempFileIg(String suffix) {
+        try {
+            return Files.createTempFile(Path.of(dataFilePath), "tempIngredientFile", suffix);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

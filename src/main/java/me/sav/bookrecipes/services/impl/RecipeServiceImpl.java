@@ -8,6 +8,11 @@ import me.sav.bookrecipes.services.RecipeService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.nio.file.Path;
+import java.io.IOException;
+import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -58,6 +63,20 @@ public class RecipeServiceImpl implements RecipeService {
         saveToFileRc();
 
     }
+
+    @Override
+    public Path createRecipeReport(Recipes recipes) throws IOException {
+        Map<Integer, Recipes> recipesMapOrDefault = (Map<Integer, Recipes>) recipesMap.getOrDefault(recipes, new Recipes());
+        Path path = filesService.createTempFileRc("recipeReport");
+        for (Recipes recipe : recipesMapOrDefault.values()) {
+            try (Writer writer = Files.newBufferedWriter(path, StandardOpenOption.APPEND)) {
+                writer.append(recipe.getTitle() + recipe.getCookingMethod() + recipe.getCookingTime());
+                writer.append("\n");
+            }
+        }
+        return path;
+    }
+
 
     private void saveToFileRc() {
         try {
