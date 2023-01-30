@@ -1,0 +1,19 @@
+{
+  "0": {
+    "title": "Сырники из творога",
+    "cookingTime": 30,
+    "ingredients": [
+      {
+        "ingredient": "Творог",
+        "amountIngredient": 350,
+        "measure": "гр"
+      },
+      {
+        "ingredient": "Куриное яйцо",
+        "amountIngredient": 2,
+        "measure": "шт"
+      }
+    ],
+    "cookingMethod": "перемешать"
+  }
+}
