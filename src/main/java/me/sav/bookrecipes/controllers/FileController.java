@@ -39,7 +39,7 @@ public class FileController {
         }
     }
 
-    @PostMapping(value = "/export/recipe", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/import/recipe", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> uploadDataFileRc(@RequestParam MultipartFile fileUpRc) {
         filesService.cleanDataFileRc();
         File fileDownRc = filesService.getDataFileRc();
@@ -71,7 +71,7 @@ public class FileController {
         }
     }
 
-    @PostMapping(value = "/export/ingredient", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/import/ingredient", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> uploadDataFileIg(@RequestParam MultipartFile fileUpIg) {
         filesService.cleanDataFileIg();
         File fileDownIg = filesService.getDataFileIg();
