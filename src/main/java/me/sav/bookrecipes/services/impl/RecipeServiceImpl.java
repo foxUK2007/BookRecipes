@@ -3,14 +3,16 @@ package me.sav.bookrecipes.services.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import me.sav.bookrecipes.model.Ingredients;
 import me.sav.bookrecipes.model.Recipes;
 import me.sav.bookrecipes.services.RecipeService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.io.IOException;
-import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.Map;
@@ -65,12 +67,14 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Path createRecipeReport(Recipes recipes) throws IOException {
-        Map<Integer, Recipes> recipesMapOrDefault = (Map<Integer, Recipes>) recipesMap.getOrDefault(recipes, new Recipes());
+    public Path createRecipeReport() throws IOException {
         Path path = filesService.createTempFileRc("recipeReport");
-        for (Recipes recipe : recipesMapOrDefault.values()) {
+        for (Recipes recipe : recipesMap.values()) {
             try (Writer writer = Files.newBufferedWriter(path, StandardOpenOption.APPEND)) {
-                writer.append(recipe.getTitle() + recipe.getCookingMethod() + recipe.getCookingTime());
+                writer.append("Название: " + recipe.getTitle())
+                        .append("Список ингредиентов")
+                        .append(String.valueOf(recipe.getIngredients()))
+                        .append("Способ приготовления: " + recipe.getCookingMethod());
                 writer.append("\n");
             }
         }

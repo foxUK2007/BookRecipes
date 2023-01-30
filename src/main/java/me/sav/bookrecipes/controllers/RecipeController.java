@@ -13,10 +13,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -79,9 +81,7 @@ public class RecipeController {
 
     @GetMapping("/{recipe}")
     @Operation(
-            summary = "Получение любого рецепта из книги",
-            description = "Получение по порядковому номеру рецепта"
-    )
+            summary = "Получение списка рецептов")
     @ApiResponses(value =
             {
                     @ApiResponse(
@@ -93,24 +93,25 @@ public class RecipeController {
             @Parameter(name = "Порядковый номер рецепта",
                     description = "Целое число")
     })
-    public ResponseEntity<InputStreamResource> getRecipe(@PathVariable Recipes recipe) {
+    public ResponseEntity<Object> getRecipeReport() {
         try {
-            java.nio.file.Path path = (Path) recipeService.createRecipeReport(new Recipes());
-            if (Files.size(path) != 0) {
+            Path path = recipeService.createRecipeReport();
+            if (Files.size(path) == 0){
                 return ResponseEntity.noContent().build();
             }
             InputStreamResource resource = new InputStreamResource(new FileInputStream(path.toFile()));
             return ResponseEntity.ok()
                     .contentType(MediaType.TEXT_PLAIN)
                     .contentLength(Files.size(path))
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename =\"" + recipe + "-report.txt\"")
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename =\"" + "-report.txt\"")
                     .body(resource);
 
         } catch (IOException e) {
             e.printStackTrace();
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.internalServerError().body(e.toString());
         }
     }
+
 
     @PutMapping("/{id}")
     @Operation(
