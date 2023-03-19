@@ -12,13 +12,9 @@ import java.util.TreeMap;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Recipes {
-
     private String title;
-
     private int cookingTime;
-
-    private Ingredients ingredients[];
-
+    private Ingredients ingredients;
     private String cookingMethod;
 
 }
